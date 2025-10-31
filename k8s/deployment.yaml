@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spam-ham
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spam-ham
+  template:
+    metadata:
+      labels:
+        app: spam-ham
+    spec:
+      containers:
+      - name: spam-ham
+        image: localhost:32000/spam-ham:latest
+        ports:
+        - containerPort: 8000
+

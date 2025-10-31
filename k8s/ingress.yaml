@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spamham-ingress
+spec:
+  rules:
+  - host: spam.ham
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: spamham-service
+            port:
+              number: 80
+
