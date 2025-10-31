@@ -1,0 +1,8 @@
+pandas
+scikit-learn
+notebook
+nltk
+ipykernel
+fastapi
+pydantic
+uvicorn
