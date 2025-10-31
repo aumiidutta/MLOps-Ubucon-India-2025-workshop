@@ -4,12 +4,19 @@ import joblib
 
 app = FastAPI()
 
+# Load model and vectorizer
 model = joblib.load("model.pkl")
+vectorizer = joblib.load("vectorizer.pkl")
 
 class TextInput(BaseModel):
-    msg:str
+    msg: str
 
 @app.post("/predict")
 def predict(data: TextInput):
-    prediction = model.predict([data.msg])
-    return {"sentiment": prediction}
+    text = data.msg
+    text_vector = vectorizer.transform([text])
+
+    prediction = model.predict(text_vector)
+    result = prediction[0]
+
+    return {"sentiment": str(result)}
