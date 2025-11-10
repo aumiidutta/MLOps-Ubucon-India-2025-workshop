@@ -1,5 +1,22 @@
 # From notebook to cloud: Deploy ML model on Ubuntu
 
+## About
+
+Through this workshop, you will gain hands-on experience in the MLOps workflow by using Podman for containerization, Microk8s for Deployment.
+
+## System requirements
+
+- 8 GB RAM [16 GB better]
+- Atleast 40GB free space on disk
+
+## Prerequisites
+
+- Ubuntu LTS
+- Podman
+- Microk8s
+- Python3
+- Will to learn
+
 ## Folder structure
 
 Workshop_root/<br />
@@ -20,7 +37,6 @@ Workshop_root/<br />
 ├── README.md<br />
 └── requirements.txt<br />
 └── <venv_name>
-
 
 ## Steps to follow:
 
@@ -197,13 +213,73 @@ registries:
 
 ### G. Deployment
 
+- Add the deployment definition
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <app_name> //spam-ham
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: <app_name> //spam-ham
+  template:
+    metadata:
+      labels:
+        app: <app_name> //spam-ham
+    spec:
+      containers:
+      - name: spam-ham
+        image: localhost:32000/<app_name>:latest //localhost:32000/spam-ham:latest
+        ports:
+        - containerPort: 8000
+```
+- Add the service 
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: <service_name> //spamham-service
+spec:
+  selector:
+    app: <app_name> //spam-ham
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+  type: NodePort
+```
+- Add the ingress file
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: <name> //spamham-ingress
+spec:
+  rules:
+  - host: <host.url> //spam.ham 
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: <service_name> //spamham-service
+            port:
+              number: 80
+```
 - Tag your Podman image for MicroK8s local registry
 ```
-podman tag spam-ham localhost:32000/spam-ham:latest
+podman tag <app_name> localhost:32000/<app_name>:latest
+*podman tag spam-ham localhost:32000/spam-ham:latest*
+
 ```
 - Push to MicroK8s registry
 ```
-podman push localhost:32000/spam-ham:latest
+podman push localhost:32000/<app_name>:latest
+*podman push localhost:32000/spam-ham:latest*
+
 ```
 - Apply to Cluster
 ```
@@ -217,21 +293,28 @@ echo "127.0.0.1 spam.ham" | sudo tee -a /etc/hosts
 
 ### H. Testing the endpoint
 
-- Test a case where the output is spam
+- Test a case from terminal:
+  - where the output is spam
 ```
-curl http://spam.ham/predict \
+curl http://<host.url>/predict \
   -X POST \
   -H "Content-Type: application/json" \
   -d '{"msg": "Unbelievable offer! Buy 1 get 4 free, click on this link to claim"}'
 ```
-- Test a case where the output is ham
+  - where the output is ham
 ```
-curl http://spam.ham/predict \
+curl http://<host.url>/predict \
   -X POST \
   -H "Content-Type: application/json" \
   -d '{"msg": "I am attending Ubucon India 2025!"}'
 ```
 
+- Test a case from browser
+<host.url>/docs
 
 
+## Contact
 
+Have any doubts? Reach out to us: <br />
+[Saumili Dutta](https://www.linkedin.com/in/saumilidutta/)<br />
+[Aditya D.](https://www.linkedin.com/in/aditya-d-23453a179/)<br />
