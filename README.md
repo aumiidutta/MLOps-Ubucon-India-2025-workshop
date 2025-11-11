@@ -301,6 +301,7 @@ curl http://<host.url>/predict \
   -H "Content-Type: application/json" \
   -d '{"msg": "Unbelievable offer! Buy 1 get 4 free, click on this link to claim"}'
 ```
+![Image](https://github.com/user-attachments/assets/4f57ff32-6b14-484e-886e-eb426456d070)
   - where the output is ham
 ```
 curl http://<host.url>/predict \
@@ -308,10 +309,10 @@ curl http://<host.url>/predict \
   -H "Content-Type: application/json" \
   -d '{"msg": "I am attending Ubucon India 2025!"}'
 ```
-
+![Image](https://github.com/user-attachments/assets/cee8e612-4b1c-495a-9a9c-55f9d3de211b)
 - Test a case from browser
 <host.url>/docs
-
+![Image](https://github.com/user-attachments/assets/b18ac90a-680b-4324-8432-a444976a7473)
 
 ## Contact
 
